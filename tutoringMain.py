@@ -2,6 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_tutoringMainUI(object):
     def setupUi(self, tutoringMainUI):
+        #UI Setup
         tutoringMainUI.setObjectName("tutoringMainUI")
         tutoringMainUI.resize(357, 421)
         tutoringMainUI.setMinimumSize(QtCore.QSize(357, 421))
@@ -48,24 +49,45 @@ class Ui_tutoringMainUI(object):
         self.btnSetting.setIconSize(QtCore.QSize(20, 20))
         self.btnSetting.setObjectName("btnSetting")
         self.gridLayout.addWidget(self.btnSetting, 7, 0, 1, 1)
-
         self.retranslateUi(tutoringMainUI)
         QtCore.QMetaObject.connectSlotsByName(tutoringMainUI)
+
+        #Disable Unused Buttons
+        self.btnSchedule.setDisabled(True)
+        self.btnSetting.setDisabled(True)
+
+        #Call Functions
+        self.btnAdd.clicked.connect(lambda: toAddStudent(self,tutoringMainUI))
+        self.btnStatement.clicked.connect(lambda: toStatement(self,tutoringMainUI))
 
     def retranslateUi(self, tutoringMainUI):
         _translate = QtCore.QCoreApplication.translate
         tutoringMainUI.setWindowTitle(_translate("tutoringMainUI", "Roster Guru"))
         self.btnStatement.setText(_translate("tutoringMainUI", " STATEMENT"))
         self.btnSchedule.setText(_translate("tutoringMainUI", " SHEDULE"))
-        self.label.setText(_translate("tutoringMainUI", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Ubuntu\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
-"<p align=\"center\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:36pt; color:#0e3262;\">ROSTER GURU</span></p></body></html>"))
+        self.label.setText(_translate("tutoringMainUI", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body style=\" font-family:\'Ubuntu\'; font-size:11pt; font-weight:400; font-style:normal;\"><p align=\"center\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:36pt; color:#0e3262;\">ROSTER GURU</span></p></body></html>"))
         self.btnAdd.setText(_translate("tutoringMainUI", " ADD STUDENT"))
         self.label_2.setText(_translate("tutoringMainUI", "<html><head/><body><p align=\"center\"><span style=\" color:#0e3262;\">TUTORING TIME KEEPING SERVICE</span></p></body></html>"))
         self.btnSetting.setText(_translate("tutoringMainUI", " SETTINGS"))
 
+from students import Ui_studentsUI
+from statement import Ui_statementUI
+
+def toAddStudent(self,tutoringMainUI):
+    self.window = QtWidgets.QWidget()
+    self.ui = Ui_studentsUI()
+    self.ui.setupUi(self.window)
+    self.window.show()
+    tutoringMainUI.hide()
+    # print("button clicked") #Debug event
+
+def toStatement(self,tutoringMainUI):
+    self.window = QtWidgets.QWidget()
+    self.ui = Ui_statementUI()
+    self.ui.setupUi(self.window)
+    self.window.show()
+    tutoringMainUI.hide()
+    # print("button clicked") #Debug event
 
 if __name__ == "__main__":
     import sys

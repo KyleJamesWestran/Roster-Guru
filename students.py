@@ -2,6 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_studentsUI(object):
     def setupUi(self, studentsUI):
+        #UI Setup
         studentsUI.setObjectName("studentsUI")
         studentsUI.resize(742, 396)
         studentsUI.setMinimumSize(QtCore.QSize(742, 396))
@@ -117,9 +118,11 @@ class Ui_studentsUI(object):
         self.btnSchedule.setIcon(icon3)
         self.btnSchedule.setObjectName("btnSchedule")
         self.gridLayout.addWidget(self.btnSchedule, 7, 1, 1, 2)
-
         self.retranslateUi(studentsUI)
         QtCore.QMetaObject.connectSlotsByName(studentsUI)
+
+        #Call Functions
+        self.btnBack.clicked.connect(lambda: toMenu(self, studentsUI))
 
     def retranslateUi(self, studentsUI):
         _translate = QtCore.QCoreApplication.translate
@@ -138,6 +141,15 @@ class Ui_studentsUI(object):
         self.label_2.setText(_translate("studentsUI", "Student Full Name:"))
         self.btnSchedule.setText(_translate("studentsUI", " SCHEDULE"))
 
+from tutoringMain import Ui_tutoringMainUI
+
+def toMenu(self,studentsUI):
+    self.window = QtWidgets.QWidget()
+    self.ui = Ui_tutoringMainUI()
+    self.ui.setupUi(self.window)
+    self.window.show()
+    studentsUI.hide()
+    # print("button clicked") #Debug event
 
 if __name__ == "__main__":
     import sys

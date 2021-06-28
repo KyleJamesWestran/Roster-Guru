@@ -2,8 +2,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_statementUI(object):
     def setupUi(self, statementUI):
+        #UI Setup
         statementUI.setObjectName("statementUI")
         statementUI.resize(899, 1673)
+        statementUI.showMaximized()
         self.gridLayout = QtWidgets.QGridLayout(statementUI)
         self.gridLayout.setObjectName("gridLayout")
         self.selFrom = QtWidgets.QDateEdit(statementUI)
@@ -199,9 +201,10 @@ class Ui_statementUI(object):
         self.selClient = QtWidgets.QComboBox(statementUI)
         self.selClient.setObjectName("selClient")
         self.gridLayout.addWidget(self.selClient, 1, 1, 1, 3)
-
         self.retranslateUi(statementUI)
         QtCore.QMetaObject.connectSlotsByName(statementUI)
+        #Call Functions
+        self.btnBack.clicked.connect(lambda: toMenu(self,statementUI))
 
     def retranslateUi(self, statementUI):
         _translate = QtCore.QCoreApplication.translate
@@ -244,6 +247,15 @@ class Ui_statementUI(object):
         self.label_3.setText(_translate("statementUI", "Select Month:"))
         self.label.setText(_translate("statementUI", "<html><head/><body><p align=\"center\"><span style=\" font-size:36pt; color:#0e3262;\">STATEMENT</span></p></body></html>"))
 
+from tutoringMain import Ui_tutoringMainUI
+
+def toMenu(self,statementUI):
+    self.window = QtWidgets.QWidget()
+    self.ui = Ui_tutoringMainUI()
+    self.ui.setupUi(self.window)
+    self.window.show()
+    statementUI.hide()
+    # print("button clicked") #Debug event
 
 if __name__ == "__main__":
     import sys
