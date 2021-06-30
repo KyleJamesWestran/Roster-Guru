@@ -54,11 +54,11 @@ class Ui_tutoringMainUI(object):
 
         #Disable Unused Buttons
         self.btnSchedule.setDisabled(True)
-        self.btnSetting.setDisabled(True)
 
         #Call Functions
         self.btnAdd.clicked.connect(lambda: toAddStudent(self,tutoringMainUI))
         self.btnStatement.clicked.connect(lambda: toStatement(self,tutoringMainUI))
+        self.btnSetting.clicked.connect(lambda: toSettings(self, tutoringMainUI))
 
     def retranslateUi(self, tutoringMainUI):
         _translate = QtCore.QCoreApplication.translate
@@ -72,6 +72,7 @@ class Ui_tutoringMainUI(object):
 
 from students import Ui_studentsUI
 from statement import Ui_statementUI
+from settings import Ui_SettingsUI
 
 def toAddStudent(self,tutoringMainUI):
     self.window = QtWidgets.QWidget()
@@ -89,6 +90,14 @@ def toStatement(self,tutoringMainUI):
     tutoringMainUI.hide()
     # print("button clicked") #Debug event
 
+def toSettings(self,tutoringMainUI):
+    self.window = QtWidgets.QWidget()
+    self.ui = Ui_SettingsUI()
+    self.ui.setupUi(self.window)
+    self.window.show()
+    tutoringMainUI.hide()
+    # print("button clicked") #Debug event
+
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
@@ -97,4 +106,3 @@ if __name__ == "__main__":
     ui.setupUi(tutoringMainUI)
     tutoringMainUI.show()
     sys.exit(app.exec_())
-
