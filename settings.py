@@ -2,6 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_SettingsUI(object):
     def setupUi(self, SettingsUI):
+        #UI Setup
         SettingsUI.setObjectName("SettingsUI")
         SettingsUI.resize(911, 422)
         SettingsUI.setMinimumSize(QtCore.QSize(911, 422))
@@ -49,9 +50,9 @@ class Ui_SettingsUI(object):
         self.label_7 = QtWidgets.QLabel(SettingsUI)
         self.label_7.setObjectName("label_7")
         self.gridLayout.addWidget(self.label_7, 4, 3, 1, 2)
-        self.usrButton = QtWidgets.QLineEdit(SettingsUI)
-        self.usrButton.setObjectName("usrButton")
-        self.gridLayout.addWidget(self.usrButton, 2, 5, 1, 2)
+        self.usrBank = QtWidgets.QLineEdit(SettingsUI)
+        self.usrBank.setObjectName("usrButton")
+        self.gridLayout.addWidget(self.usrBank, 2, 5, 1, 2)
         self.label_11 = QtWidgets.QLabel(SettingsUI)
         self.label_11.setObjectName("label_11")
         self.gridLayout.addWidget(self.label_11, 7, 3, 1, 1)
@@ -94,8 +95,14 @@ class Ui_SettingsUI(object):
         self.retranslateUi(SettingsUI)
         QtCore.QMetaObject.connectSlotsByName(SettingsUI)
 
-        # Call Functions
+        #Call Functions
         self.btnBack.clicked.connect(lambda: toMenu(self, SettingsUI))
+
+        #Update UI
+        settingsFile = open("settings.txt", "r")
+        lines = settingsFile.readlines()
+        myCompanyName = lines[1]
+        self.companyName.setText(myCompanyName)
 
     def retranslateUi(self, SettingsUI):
         _translate = QtCore.QCoreApplication.translate
@@ -117,12 +124,34 @@ class Ui_SettingsUI(object):
 from tutoringMain import Ui_tutoringMainUI
 
 def toMenu(self,SettingsUI):
+    updateSettings(self.companyName,self.usrMessage,self.usrBank,self.usrAccHold,self.usrAccNum,self.usrBankCode,self.usrRef)
     self.window = QtWidgets.QWidget()
     self.ui = Ui_tutoringMainUI()
     self.ui.setupUi(self.window)
     self.window.show()
     SettingsUI.hide()
-    # print("button clicked") #Debug event
+    #print("button clicked") #Debug event
+
+def updateSettings(companyName,usrMessage,usrBank,usrAccHold,usrAccNum,usrBankCode,usrRef):
+    companyName = companyName.text()
+    usrMessage = usrMessage.toPlainText()
+    usrBank = usrBank.text()
+    usrAccHold = usrAccHold.text()
+    usrAccNum = usrAccNum.text()
+    usrBankCode = usrBankCode.text()
+    usrRef = usrRef.text()
+
+    open('settings.txt', 'w').close()
+    settingsFile = open("settings.txt","a")
+    settingsFile.write(companyName+"\n")
+    settingsFile.write(usrMessage+"\n")
+    settingsFile.write(usrBank+"\n")
+    settingsFile.write(usrAccHold+"\n")
+    settingsFile.write(usrAccNum+"\n")
+    settingsFile.write(usrBankCode+"\n")
+    settingsFile.write(usrRef)
+    settingsFile.close()
+    return
 
 if __name__ == "__main__":
     import sys
