@@ -107,7 +107,7 @@ class Ui_SettingsUI(object):
         QtCore.QMetaObject.connectSlotsByName(SettingsUI)
 
         #Update UI
-        settingsFile = open("settings.txt", "r")
+        settingsFile = open("Files/settings.txt", "r")
         lines = settingsFile.readlines()
         myCompanyName = lines[0]
         myMsg = lines[1]
@@ -125,19 +125,18 @@ class Ui_SettingsUI(object):
         self.usrRef.setText(myRef)
         settingsFile.close()
 
-        focusFile = open("focus.txt", "r")
-        with open("focus.txt") as file:
+        with open("Files/focus.txt") as focusFile:
             for lines in focusFile:
                 lines = lines.replace('\n', '')
                 self.listFocus.addItem(lines)
         focusFile.close()
 
-        pathFile = open("paths.txt", "r")
+        pathFile = open("Files/paths.txt", "r")
         imagePath = pathFile.readlines()
         imagePath = str(imagePath)
         imagePath = imagePath.replace("['",'')
         imagePath = imagePath.replace("']", '')
-        print(imagePath)
+        #print(imagePath)
         pathFile.close()
         pixmap = QPixmap(imagePath)
         self.companyLogo.setPixmap(QPixmap(pixmap))
@@ -148,7 +147,6 @@ class Ui_SettingsUI(object):
             self.companyLogo.setText(_translate("SettingsUI","<html><head/><body><p align=\"center\"><span style=\" font-size:22pt; font-weight:600; color:#888a85;\">LOGO</span></p></body></html>"))
         else:
             self.companyLogo.setStyleSheet("")
-
 
         #Call Functions
         self.btnBack.clicked.connect(lambda: updateSettings(self, SettingsUI))
@@ -184,7 +182,7 @@ def toMenu(self,SettingsUI):
     #print("button clicked") #Debug event
 
 def updateSettings(self,SettingsUI):
-    open('settings.txt', 'w').close()
+    open('Files/settings.txt', 'w').close()
     cName = self.companyName.text()
     cName = cName.replace('\n', '')
     uMessage = self.usrMessage.toPlainText()
@@ -200,7 +198,7 @@ def updateSettings(self,SettingsUI):
     uRef = self.usrRef.text()
     uRef = uRef.replace('\n', '')
 
-    settingsFile = open("settings.txt","a")
+    settingsFile = open("Files/settings.txt","a")
     settingsFile.write(cName + "\n")
     settingsFile.write(uMessage + "\n")
     settingsFile.write(uBank + "\n")
@@ -213,18 +211,17 @@ def updateSettings(self,SettingsUI):
     toMenu(self, SettingsUI)
 
 def addFocus(self):
-
     focus = self.usrFocus.text()
     if focus == "":
         return
     else:
         self.listFocus.clear()
-        focusFile = open("focus.txt", "a")
+        focusFile = open("Files/focus.txt", "a")
         focusFile.write(focus + "\n")
         focusFile.close()
 
-        focusFile = open("focus.txt", "r")
-        with open("focus.txt") as file:
+        focusFile = open("Files/focus.txt", "r")
+        with open("Files/focus.txt") as file:
             for lines in focusFile:
                 lines = lines.replace('\n', '')
                 self.listFocus.addItem(lines)
@@ -235,11 +232,11 @@ def addFocus(self):
 
 def removeFocus(self):
     item = self.listFocus.currentText()
-    focusFile = open("focus.txt", "r")
+    focusFile = open("Files/focus.txt", "r")
     lines = focusFile.readlines()
     focusFile.close()
 
-    focusFile = open("focus.txt", "w")
+    focusFile = open("Files/focus.txt", "w")
     for line in lines:
         if line.strip("\n") != item:
             focusFile.write(line)
@@ -249,10 +246,10 @@ def removeFocus(self):
     self.listFocus.removeItem(index)
 
 def getImage(self, logo):
-    open('paths.txt', 'w').close()
+    open('Files/paths.txt', 'w').close()
     fname = QFileDialog.getOpenFileName(logo, 'Open file','c:\\', "Image files (*.jpg *.gif *.jpg *.png)")
     imagePath = fname[0]
-    pathFile = open("paths.txt", "a")
+    pathFile = open("Files/paths.txt", "a")
     pathFile.write(imagePath)
     pathFile.close()
     pixmap = QPixmap(imagePath)

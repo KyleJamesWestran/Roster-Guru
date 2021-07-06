@@ -52,13 +52,11 @@ class Ui_tutoringMainUI(object):
         self.retranslateUi(tutoringMainUI)
         QtCore.QMetaObject.connectSlotsByName(tutoringMainUI)
 
-        #Disable Unused Buttons
-        self.btnSchedule.setDisabled(True)
-
         #Call Functions
         self.btnAdd.clicked.connect(lambda: toAddStudent(self,tutoringMainUI))
         self.btnStatement.clicked.connect(lambda: toStatement(self,tutoringMainUI))
         self.btnSetting.clicked.connect(lambda: toSettings(self, tutoringMainUI))
+        self.btnSchedule.clicked.connect(lambda: toSchedule(self, tutoringMainUI))
 
     def retranslateUi(self, tutoringMainUI):
         _translate = QtCore.QCoreApplication.translate
@@ -73,6 +71,7 @@ class Ui_tutoringMainUI(object):
 from students import Ui_studentsUI
 from statement import Ui_statementUI
 from settings import Ui_SettingsUI
+from schedule import Ui_scheduleUI
 
 def toAddStudent(self,tutoringMainUI):
     self.window = QtWidgets.QWidget()
@@ -93,6 +92,14 @@ def toStatement(self,tutoringMainUI):
 def toSettings(self,tutoringMainUI):
     self.window = QtWidgets.QWidget()
     self.ui = Ui_SettingsUI()
+    self.ui.setupUi(self.window)
+    self.window.show()
+    tutoringMainUI.hide()
+    # print("button clicked") #Debug event
+
+def toSchedule(self,tutoringMainUI):
+    self.window = QtWidgets.QWidget()
+    self.ui = Ui_scheduleUI()
     self.ui.setupUi(self.window)
     self.window.show()
     tutoringMainUI.hide()
