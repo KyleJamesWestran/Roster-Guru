@@ -2,6 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_scheduleUI(object):
     def setupUi(self, scheduleUI):
+        # UI Setup
         scheduleUI.setObjectName("scheduleUI")
         scheduleUI.resize(700, 800)
         self.gridLayout = QtWidgets.QGridLayout(scheduleUI)
@@ -129,7 +130,7 @@ class Ui_scheduleUI(object):
         self.btnBack.clicked.connect(lambda: toMenu(self, scheduleUI))
         self.sliderTime.valueChanged.connect(self.updateLCD)
         self.spinDuration.valueChanged.connect(self.lcdRefresh)
-
+        updateList(self)
 
     def retranslateUi(self, scheduleUI):
         _translate = QtCore.QCoreApplication.translate
@@ -216,6 +217,10 @@ def toMenu(self,scheduleUI):
     self.window.show()
     scheduleUI.hide()
     # print("button clicked") #Debug event
+
+def updateList(self):
+    #clientFile = open("")
+    pass
 
 if __name__ == "__main__":
     import sys
