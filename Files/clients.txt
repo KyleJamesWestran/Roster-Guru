@@ -1,2 +1,2 @@
-Kyle Westran,17.Mathematics#Suzanne Westran;0794756953=R50
-Alex Gaylard,6.Afrikaans#Vicky Gaylard;0768536987=R99
+Kyle Westran,12,Mathematics,Suzanne Westran,0794756953,R150
+Alex Gaylard,6,Afrikaans,Vicky Gaylard,0894456399,R350

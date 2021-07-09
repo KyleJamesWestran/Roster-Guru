@@ -16,6 +16,7 @@ class Ui_studentsUI(object):
 
         self.studentGrade = QtWidgets.QSpinBox(studentsUI)
         self.studentGrade.setObjectName("studentGrade")
+        self.studentGrade.setMaximum(12)
         self.gridLayout_2.addWidget(self.studentGrade, 2, 2, 1, 2)
 
         self.studentFocus = QtWidgets.QComboBox(studentsUI)
@@ -32,6 +33,7 @@ class Ui_studentsUI(object):
 
         self.rate = QtWidgets.QSpinBox(studentsUI)
         self.rate.setObjectName("rate")
+        self.rate.setMaximum(999999)
         self.gridLayout_2.addWidget(self.rate, 6, 2, 1, 2)
 
         self.btnAdd = QtWidgets.QPushButton(studentsUI)
@@ -133,7 +135,7 @@ def addStudent(self):
     clientContact = self.parentContact.text()
     rate = self.rate.text()
 
-    info = ("{0},{1}.{2}#{3};{4}=R{5}".format(stuName,stuGrade,stuFocus,clientName,clientContact,rate))
+    info = ("{0},{1},{2},{3},{4},R{5}".format(stuName,stuGrade,stuFocus,clientName,clientContact,rate))
 
     with open("Files/clients.txt", "a+") as clientFile:
         clientFile.seek(0)
@@ -146,7 +148,6 @@ def removeStudent(self):
     clientFile = open("Files/clients.txt", "r")
     lines = clientFile.readlines()
     clientFile.close()
-
     del lines[item]
     clientFile = open("Files/clients.txt", "w+")
     for line in lines:
@@ -162,10 +163,6 @@ def updateStudents(self):
         count += 1
         line = clientsFile.readline()
         line = line.replace(",",", ")
-        line = line.replace(".", ", ")
-        line = line.replace("#", ", ")
-        line = line.replace(";", ", ")
-        line = line.replace("=", ", ")
         if not line:
             break
         self.listStudents.insertItem(count, line.strip())
