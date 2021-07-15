@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-import sys
+import os
 
 class Ui_scheduleUI(object):
     def setupUi(self, scheduleUI):
@@ -137,6 +137,8 @@ class Ui_scheduleUI(object):
         # Call Functions
         self.btnBack.clicked.connect(lambda: toMenu(self, scheduleUI))
         self.sliderTime.valueChanged.connect(self.updateLCD)
+        self.listStudents.currentIndexChanged.connect(lambda: loadLable(self))
+        self.calendar.selectionChanged.connect(lambda: loadLable(self))
         self.spinDuration.valueChanged.connect(self.lcdRefresh)
         self.btnUpdate.clicked.connect(lambda: updateInfo(self))
         updateList(self)
@@ -144,11 +146,11 @@ class Ui_scheduleUI(object):
     def retranslateUi(self, scheduleUI):
         _translate = QtCore.QCoreApplication.translate
         scheduleUI.setWindowTitle(_translate("scheduleUI", "Schedule"))
-        self.lblDate.setText(_translate("scheduleUI", "Insert Date"))
+        self.lblDate.setText(_translate("scheduleUI", "No record found"))
         self.label_5.setText(_translate("scheduleUI", "Date:"))
         self.label_13.setText(_translate("scheduleUI", "Set Slot Duration"))
         self.btnBack.setText(_translate("scheduleUI", " Back"))
-        self.lblHours.setText(_translate("scheduleUI", "Insert Hours"))
+        self.lblHours.setText(_translate("scheduleUI", "No record found"))
         self.label_12.setText(_translate("scheduleUI", "Set Time:"))
         self.label.setText(_translate("scheduleUI", "Student:"))
         self.btnUpdate.setText(_translate("scheduleUI", " Update"))
@@ -260,33 +262,47 @@ def updateInfo(self):
     hours = self.spinDuration.value()
     times = self.store()
     note = self.notes.toPlainText()
+    checkFile(student)
 
-    studentFile = open("Students/{0}.txt".format(student), "r")
+    studentFile = open("Students/{0}.txt".format(student), "r+")
     lines = studentFile.readlines()
     studentFile.close()
-    check = any(date in string for string in lines)
     open("Students/{0}.txt".format(student), 'w').close()
-    studentFile = open("Students/{0}.txt".format(student), "a+")
-    length = len(lines)
-    counter = 0
+    studentFile = open("Students/{0}.txt".format(student), "w+")
 
-    while counter < length:
-        if check == True:
-            lines[counter] = ("{0},{1},{2},{3}\n".format(date,hours,times,note))
-            print(lines)
-        counter +=1
+    if any(date in string for string in lines) == True:
+        index = [lines.index(i) for i in lines if date in i]
+        lines[index[0]] = ("{0},{1},{2},{3}\n".format(date,hours,times,note))
     else:
         lines.append("{0},{1},{2},{3}\n".format(date,hours,times,note))
-        print(lines)
 
     studentFile.writelines(lines)
     studentFile.close()
+    loadLable(self)
 
-    #adjustCalendar(self)
+def checkFile(student):
+    if not os.path.exists("Students/{0}.txt".format(student)):
+        open("Students/{0}.txt".format(student), "w+")
+    return
 
-#def adjustCalendar(self):
-    #rect = (10,10)
-    #self.calendar.paintCell(QtGui.QPainter.drawText(rect,10,"hi"))
+def loadLable(self):
+    student = self.listStudents.currentText()
+    checkFile(student)
+    date = self.calendar.selectedDate().toString()
+    studentFile = open("Students/{0}.txt".format(student), "r+")
+    lines = studentFile.readlines()
+
+    if any(date in string for string in lines) == True:
+        index = [lines.index(i) for i in lines if date in i]
+        display = lines[index[0]]
+        day = display.split(",")
+        date = day[0]
+        hours = day[1]
+        self.lblDate.setText(date)
+        self.lblHours.setText(hours)
+    else:
+        self.lblDate.setText("No record found")
+        self.lblHours.setText("No record found")
 
 if __name__ == "__main__":
     import sys

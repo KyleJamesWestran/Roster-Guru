@@ -1,4 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtGui import QPixmap
 
 class Ui_statementUI(object):
     def setupUi(self, statementUI):
@@ -81,6 +82,10 @@ class Ui_statementUI(object):
         self.scrollArea_3.setMaximumSize(QtCore.QSize(400, 180))
         self.scrollArea_3.setStyleSheet("")
         self.scrollArea_3.setWidgetResizable(True)
+        self.scrollArea_3.setMinimumSize(400,195)
+        self.scrollArea_3.verticalScrollBar().setEnabled(False)
+        self.scrollArea_3.setStyleSheet("QScrollBar {height:0px;}")
+        self.scrollArea_3.setStyleSheet("QScrollBar {width:0px;}")
         self.scrollArea_3.setObjectName("scrollArea_3")
         self.scrollAreaWidgetContents_3 = QtWidgets.QWidget()
         self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 398, 178))
@@ -128,7 +133,8 @@ class Ui_statementUI(object):
         self.usrMessage.setObjectName("usrMessage")
         self.gridLayout_3.addWidget(self.usrMessage, 7, 0, 1, 7)
         self.companyLogo = QtWidgets.QLabel(self.scrollAreaWidgetContents_2)
-        self.companyLogo.setMinimumSize(QtCore.QSize(200, 80))
+        self.companyLogo.setMinimumSize(QtCore.QSize(230, 100))
+        self.companyLogo.setMaximumSize(QtCore.QSize(230, 100))
         self.companyLogo.setStyleSheet("border: 3px solid;border-color: rgb(181, 181, 181);border-radius: 10px;")
         self.companyLogo.setObjectName("companyLogo")
         self.gridLayout_3.addWidget(self.companyLogo, 0, 4, 1, 3)
@@ -202,8 +208,16 @@ class Ui_statementUI(object):
         self.selClient.setObjectName("selClient")
         self.gridLayout.addWidget(self.selClient, 1, 1, 1, 3)
         self.retranslateUi(statementUI)
+        header = self.statementTable.horizontalHeader()
+        #header.setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
+        #header.setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)
+        #header.setSectionResizeMode(3, QtWidgets.QHeaderView.ResizeToContents)
+
         QtCore.QMetaObject.connectSlotsByName(statementUI)
+
         #Call Functions
+        updateCompanyInfo(self)
         self.btnBack.clicked.connect(lambda: toMenu(self,statementUI))
 
     def retranslateUi(self, statementUI):
@@ -245,7 +259,8 @@ class Ui_statementUI(object):
         self.companyName.setText(_translate("statementUI", "<html><head/><body><p align=\"center\"><span style=\" font-weight:600;\">Company Name</span></p></body></html>"))
         self.clientName.setText(_translate("statementUI", "Name"))
         self.label_3.setText(_translate("statementUI", "Select Month:"))
-        self.label.setText(_translate("statementUI", "<html><head/><body><p align=\"center\"><span style=\" font-size:36pt; color:#0e3262;\">STATEMENT</span></p></body></html>"))
+        self.label.setText(_translate("statementUI","<html><head/><body><p align=\"center\"><span style=\" font-size:36pt; color:#0e3262;\">STATEMENT</span></p></body></html>"))
+
 
 from tutoringMain import Ui_tutoringMainUI
 
@@ -256,6 +271,43 @@ def toMenu(self,statementUI):
     self.window.show()
     statementUI.hide()
     # print("button clicked") #Debug event
+
+def updateCompanyInfo(self):
+    settingsFile = open("Files/settings.txt", "r")
+    lines = settingsFile.readlines()
+    myCompanyName = lines[0]
+    myMsg = lines[1]
+    myBank = lines[2]
+    myHolder = lines[3]
+    myAccNum = lines[4]
+    myBranch = lines[5]
+    myRef = lines[6]
+    self.companyName.setText("<html><head/><body><p align=\"center\"><span style=\" font-weight:600;\">{0}</span></p></body></html>".format(myCompanyName))
+    self.usrMessage.setText("<html><head/><body><p align=\"center\"><span style=\" font-size:18pt;\">{0}</span></p></body></html>".format(myMsg))
+    self.usrBank.setText(myBank)
+    self.usrAccName.setText(myHolder)
+    self.usrAccNum.setText(myAccNum)
+    self.usrBranch.setText(myBranch)
+    self.usrRef.setText(myRef)
+    settingsFile.close()
+
+    pathFile = open("Files/paths.txt", "r")
+    imagePath = pathFile.readlines()
+    imagePath = str(imagePath)
+    imagePath = imagePath.replace("['", '')
+    imagePath = imagePath.replace("']", '')
+    pathFile.close()
+    pixmap = QPixmap(imagePath)
+    self.companyLogo.setPixmap(QPixmap(pixmap))
+    self.companyLogo.setScaledContents(True)
+
+    if imagePath == "[]":
+        self.companyLogo.setStyleSheet("border: 3px solid;border-color: rgb(181, 181, 181);border-radius: 10px;")
+        _translate = QtCore.QCoreApplication.translate
+        self.companyLogo.setText(_translate("SettingsUI",
+                                            "<html><head/><body><p align=\"center\"><span style=\" font-size:22pt; font-weight:600; color:#888a85;\">LOGO</span></p></body></html>"))
+    else:
+        self.companyLogo.setStyleSheet("")
 
 if __name__ == "__main__":
     import sys
