@@ -258,11 +258,10 @@ def updateList(self):
 
 def updateInfo(self):
     student = self.listStudents.currentText()
-    date = self.calendar.selectedDate().toString()
+    date = self.calendar.selectedDate().toString("yyyy-MM-dd")
     hours = self.spinDuration.value()
     times = self.store()
     note = self.notes.toPlainText()
-    checkFile(student)
 
     studentFile = open("Students/{0}.txt".format(student), "r+")
     lines = studentFile.readlines()
@@ -280,17 +279,12 @@ def updateInfo(self):
     studentFile.close()
     loadLable(self)
 
-def checkFile(student):
-    if not os.path.exists("Students/{0}.txt".format(student)):
-        open("Students/{0}.txt".format(student), "w+")
-    return
-
 def loadLable(self):
     student = self.listStudents.currentText()
-    checkFile(student)
-    date = self.calendar.selectedDate().toString()
+    date = self.calendar.selectedDate().toString("yyyy-MM-dd")
     studentFile = open("Students/{0}.txt".format(student), "r+")
     lines = studentFile.readlines()
+    studentFile.close()
 
     if any(date in string for string in lines) == True:
         index = [lines.index(i) for i in lines if date in i]

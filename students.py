@@ -1,3 +1,5 @@
+import os
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_studentsUI(object):
@@ -135,6 +137,8 @@ def addStudent(self):
     clientContact = self.parentContact.text()
     rate = self.rate.text()
 
+    studentFile = open("Students/{0}.txt".format(stuName), "w+")
+
     info = ("{0},{1},{2},{3},{4},R{5}".format(stuName,stuGrade,stuFocus,clientName,clientContact,rate))
 
     with open("Files/clients.txt", "a+") as clientFile:
@@ -145,6 +149,10 @@ def addStudent(self):
 
 def removeStudent(self):
     item = self.listStudents.currentRow()
+    student = self.listStudents.currentItem().text()
+    student = student.split(",")
+    student = student[0]
+
     clientFile = open("Files/clients.txt", "r")
     lines = clientFile.readlines()
     clientFile.close()
@@ -154,6 +162,8 @@ def removeStudent(self):
         clientFile.write(line)
     clientFile.close()
     updateStudents(self)
+
+    os.remove("Students/{0}.txt".format(student))
 
 def updateStudents(self):
     self.listStudents.clear()

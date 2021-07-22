@@ -6,8 +6,8 @@ class Ui_SettingsUI(object):
     def setupUi(self, SettingsUI):
         #UI Setup
         SettingsUI.setObjectName("SettingsUI")
-        SettingsUI.setMinimumSize(QtCore.QSize(690, 450))
-        SettingsUI.setMaximumSize(QtCore.QSize(690, 450))
+        SettingsUI.setMinimumSize(QtCore.QSize(720, 450))
+        SettingsUI.setMaximumSize(QtCore.QSize(720, 450))
         self.gridLayout = QtWidgets.QGridLayout(SettingsUI)
         self.gridLayout.setObjectName("gridLayout")
 
@@ -17,7 +17,7 @@ class Ui_SettingsUI(object):
         self.usrMessage = QtWidgets.QTextEdit(SettingsUI)
         self.usrMessage.setObjectName("usrMessage")
         self.usrMessage.setFixedWidth(300)
-        self.gridLayout.addWidget(self.usrMessage, 4, 1, 6, 2)
+        self.gridLayout.addWidget(self.usrMessage, 4, 1, 4, 2)
         self.usrBank = QtWidgets.QLineEdit(SettingsUI)
         self.usrBank.setObjectName("usrButton")
         self.gridLayout.addWidget(self.usrBank, 2, 5, 1, 2)
@@ -69,13 +69,12 @@ class Ui_SettingsUI(object):
         self.btnBack.setIcon(icon2)
         self.btnBack.setObjectName("btnBack")
         self.gridLayout.addWidget(self.btnBack, 10, 6, 1, 1)
-
         self.label_4 = QtWidgets.QLabel(SettingsUI)
         self.label_4.setObjectName("label_4")
         self.gridLayout.addWidget(self.label_4, 3, 3, 1, 2)
         self.companyLogo = QtWidgets.QLabel(SettingsUI)
-        self.companyLogo.setMinimumSize(QtCore.QSize(230, 100))
-        self.companyLogo.setMaximumSize(QtCore.QSize(230, 100))
+        self.companyLogo.setMinimumSize(QtCore.QSize(260, 100))
+        self.companyLogo.setMaximumSize(QtCore.QSize(260, 100))
         self.companyLogo.setObjectName("companyLogo")
         self.gridLayout.addWidget(self.companyLogo, 9, 5, 1, 2)
         self.label_9 = QtWidgets.QLabel(SettingsUI)
@@ -103,6 +102,15 @@ class Ui_SettingsUI(object):
         self.label_8.setObjectName("label_8")
         self.gridLayout.addWidget(self.label_8, 5, 3, 1, 2)
 
+        self.label_12 = QtWidgets.QLabel(SettingsUI)
+        self.label_12.setObjectName("description")
+        self.gridLayout.addWidget(self.label_12, 8, 1, 1, 1)
+
+        self.usrDescription = QtWidgets.QTextEdit(SettingsUI)
+        self.usrDescription.setObjectName("usrMessage")
+        self.usrDescription.setFixedWidth(300)
+        self.gridLayout.addWidget(self.usrDescription, 9, 1, 1, 2)
+
         self.retranslateUi(SettingsUI)
         QtCore.QMetaObject.connectSlotsByName(SettingsUI)
 
@@ -116,6 +124,7 @@ class Ui_SettingsUI(object):
         myAccNum = lines[4]
         myBranch = lines[5]
         myRef = lines[6]
+        myDesc = lines[7]
         self.companyName.setText(myCompanyName)
         self.usrMessage.setPlainText(myMsg)
         self.usrBank.setText(myBank)
@@ -123,6 +132,7 @@ class Ui_SettingsUI(object):
         self.usrAccNum.setText(myAccNum)
         self.usrBankCode.setText(myBranch)
         self.usrRef.setText(myRef)
+        self.usrDescription.setText(myDesc)
         settingsFile.close()
 
         with open("Files/focus.txt") as focusFile:
@@ -158,6 +168,7 @@ class Ui_SettingsUI(object):
         _translate = QtCore.QCoreApplication.translate
         SettingsUI.setWindowTitle(_translate("SettingsUI", "Settings"))
         self.label_4.setText(_translate("SettingsUI", "Account Holder:"))
+        self.label_12.setText(_translate("SettingsUI", "Default Description:"))
         self.btnBrowse.setText(_translate("SettingsUI", " BROWSE"))
         self.label_9.setText(_translate("SettingsUI", "Reference:"))
         self.label_3.setText(_translate("SettingsUI", "Bank:"))
@@ -197,6 +208,8 @@ def updateSettings(self,SettingsUI):
     uBankCode = uBankCode.replace('\n', '')
     uRef = self.usrRef.text()
     uRef = uRef.replace('\n', '')
+    uDesc = self.usrDescription.toPlainText()
+    uDesc = uDesc.replace('\n', '')
 
     settingsFile = open("Files/settings.txt","a")
     settingsFile.write(cName + "\n")
@@ -205,7 +218,8 @@ def updateSettings(self,SettingsUI):
     settingsFile.write(uAccHold + "\n")
     settingsFile.write(uAccNum + "\n")
     settingsFile.write(uBankCode + "\n")
-    settingsFile.write(uRef)
+    settingsFile.write(uRef+ "\n")
+    settingsFile.write(uDesc)
 
     settingsFile.close()
     toMenu(self, SettingsUI)
