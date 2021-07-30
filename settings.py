@@ -182,7 +182,7 @@ class Ui_SettingsUI(object):
         self.btnRemove.setText(_translate("SettingsUI", " Remove"))
         self.btnBack.setText(_translate("SettingsUI", " Back"))
 
-from tutoringMain import Ui_tutoringMainUI
+from RosterGuru import Ui_tutoringMainUI
 
 def toMenu(self,SettingsUI):
     self.window = QtWidgets.QWidget()

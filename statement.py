@@ -1,7 +1,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets, Qt
-import PyQt5
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtPrintSupport import QPrinter, QPrintDialog
+from PyQt5.QtGui import QPixmap, QPainter
 import datetime
+
 
 class AlignDelegate(QtWidgets.QStyledItemDelegate):
     def initStyleOption(self, option, index):
@@ -61,6 +62,16 @@ class Ui_statementUI(object):
         self.btnPrint.setIcon(icon2)
         self.btnPrint.setObjectName("btnPrint")
         self.gridLayout.addWidget(self.btnPrint, 4, 7, 1, 1)
+
+        '''self.btnShare = QtWidgets.QPushButton(statementUI)
+        self.btnShare.setMinimumSize(QtCore.QSize(100, 55))
+        self.btnShare.setMaximumSize(QtCore.QSize(150, 16777215))
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap("Resources/printer.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btnShare.setIcon(icon2)
+        self.btnShare.setObjectName("btnPrint")
+        self.gridLayout.addWidget(self.btnShare, 4, 5, 1, 1)'''
+
         self.selClient = QtWidgets.QComboBox(statementUI)
         self.selClient.setObjectName("selClient")
         self.gridLayout.addWidget(self.selClient, 1, 1, 1, 3)
@@ -240,6 +251,8 @@ class Ui_statementUI(object):
         updateCompanyInfo(self)
         updateList(self)
         updateDates(self)
+        #self.btnPrint.clicked.connect(lambda: print(self))
+        self.btnPrint.clicked.connect(self.printDialog)
         self.btnGenerate.clicked.connect(lambda: loadStatement(self))
         self.btnBack.clicked.connect(lambda: toMenu(self, statementUI))
 
@@ -253,6 +266,7 @@ class Ui_statementUI(object):
         self.btnBack.setText(_translate("statementUI", " BACK"))
         self.label_4.setText(_translate("statementUI", "<html><head/><body><p align=\"center\">- TO -</p></body></html>"))
         self.btnPrint.setText(_translate("statementUI", " PRINT"))
+        #self.btnShare.setText(_translate("statementUI", " SHARE"))
         self.companyName.setText(_translate("statementUI", "<html><head/><body><p align=\"center\"><span style=\" font-size:22pt;\">COMPANY NAME</span></p></body></html>"))
         self.label_18.setText(_translate("statementUI", "<html><head/><body><p><span style=\" font-weight:600;\">ACCOUNT NAME:</span></p></body></html>"))
         self.usrBank.setText(_translate("statementUI", "BANK NAME HERE"))
@@ -285,7 +299,26 @@ class Ui_statementUI(object):
         self.totalCost.setText(_translate("statementUI", "<html><head/><body><p align=\"right\">R999999.99</p></body></html>"))
         self.label_9.setText(_translate("statementUI", "<html><head/><body><p align=\"center\"><span style=\" font-size:20pt;\">BREAKDOWN</span></p></body></html>"))
 
-from tutoringMain import Ui_tutoringMainUI
+    def printDialog(self):
+        printer = QPrinter(QPrinter.HighResolution)
+        dialog = QPrintDialog(printer)
+        printer.setPageSize(QPrinter.A4)
+        width = printer.width()
+        height = printer.height()
+
+        if dialog.exec_() == QPrintDialog.Accepted:
+            painter = QPainter()
+            printer.setFullPage(True)
+            painter.begin(printer)
+            screen = self.Page.grab()
+            painter.setRenderHint(QtGui.QPainter.SmoothPixmapTransform)
+            screen = screen.scaledToWidth(width)
+            screen = screen.scaledToHeight(height)
+            painter.drawPixmap(0, 0, screen)
+
+            painter.end()
+
+from RosterGuru import Ui_tutoringMainUI
 
 def toMenu(self,statementUI):
     self.window = QtWidgets.QWidget()
@@ -391,6 +424,7 @@ def loadStatement(self):
     statementSelection = []
     rowPosition = self.statementTable.rowCount()
     self.statementTable.setAlternatingRowColors(True)
+    self.statementTable.verticalHeader().setSectionResizeMode(Qt.QHeaderView.ResizeToContents)
     self.statementTable.setShowGrid(False)
 
     for lines in studentFile:
@@ -434,6 +468,7 @@ def calculateCosts(self,rate):
     rate = rate.replace("R","")
     totalCost = float(rate) * totalHours
     self.totalCost.setText("<html><head/><body><p align=\"right\">R{}</p></body></html>".format(totalCost))
+
 
 if __name__ == "__main__":
     import sys

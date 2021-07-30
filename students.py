@@ -119,7 +119,7 @@ class Ui_studentsUI(object):
         self.btnRemove.setText(_translate("studentsUI", " REMOVE"))
         self.label_7.setText(_translate("studentsUI", "Focus:"))
 
-from tutoringMain import Ui_tutoringMainUI
+from RosterGuru import Ui_tutoringMainUI
 
 def toMenu(self,studentsUI):
     self.window = QtWidgets.QWidget()

@@ -231,7 +231,7 @@ class Ui_scheduleUI(object):
         curTime = self.sliderTime.value()
         self.updateLCD(curTime)
 
-from tutoringMain import Ui_tutoringMainUI
+from RosterGuru import Ui_tutoringMainUI
 
 def toMenu(self,scheduleUI):
     self.window = QtWidgets.QWidget()
