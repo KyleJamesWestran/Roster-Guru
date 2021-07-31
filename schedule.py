@@ -4,6 +4,7 @@ import os
 class Ui_scheduleUI(object):
     def setupUi(self, scheduleUI):
         # UI Setup
+        scheduleUI.setWindowIcon(QtGui.QIcon("Resources/icon.png"))
         scheduleUI.setObjectName("scheduleUI")
         scheduleUI.resize(717, 724)
         self.gridLayout = QtWidgets.QGridLayout(scheduleUI)

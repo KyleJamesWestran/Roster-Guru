@@ -12,6 +12,7 @@ class AlignDelegate(QtWidgets.QStyledItemDelegate):
 class Ui_statementUI(object):
     def setupUi(self, statementUI):
         # UI Setup
+        statementUI.setWindowIcon(QtGui.QIcon("Resources/icon.png"))
         statementUI.setObjectName("statementUI")
         statementUI.resize(998, 1673)
         statementUI.showMaximized()

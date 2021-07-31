@@ -5,6 +5,7 @@ from PyQt5.QtGui import QPixmap
 class Ui_SettingsUI(object):
     def setupUi(self, SettingsUI):
         #UI Setup
+        SettingsUI.setWindowIcon(QtGui.QIcon("Resources/icon.png"))
         SettingsUI.setObjectName("SettingsUI")
         SettingsUI.setMinimumSize(QtCore.QSize(720, 450))
         SettingsUI.setMaximumSize(QtCore.QSize(720, 450))

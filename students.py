@@ -5,6 +5,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_studentsUI(object):
     def setupUi(self, studentsUI):
         #UI Setup
+        studentsUI.setWindowIcon(QtGui.QIcon("Resources/icon.png"))
         studentsUI.setObjectName("studentsUI")
         studentsUI.resize(720, 350)
         studentsUI.setMinimumSize(QtCore.QSize(720, 350))
