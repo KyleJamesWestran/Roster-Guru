@@ -1,12 +1,14 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
-import os
+from PyQt5 import QtCore, QtGui, QtWidgets, Qt
+from PyQt5 import QtCore, QtGui
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
 
 class Ui_scheduleUI(object):
     def setupUi(self, scheduleUI):
         # UI Setup
         scheduleUI.setWindowIcon(QtGui.QIcon("Resources/icon.png"))
         scheduleUI.setObjectName("scheduleUI")
-        scheduleUI.resize(717, 724)
+        scheduleUI.resize(500, 500)
         self.gridLayout = QtWidgets.QGridLayout(scheduleUI)
         self.gridLayout.setObjectName("gridLayout")
         self.listStudents = QtWidgets.QComboBox(scheduleUI)
@@ -107,7 +109,7 @@ class Ui_scheduleUI(object):
         self.gridLayout.addItem(spacerItem1, 5, 3, 1, 1)
         self.spinDuration = QtWidgets.QDoubleSpinBox(scheduleUI)
         self.spinDuration.setDecimals(1)
-        self.spinDuration.setMinimum(0.5)
+        self.spinDuration.setMinimum(0.0)
         self.spinDuration.setMaximum(24.0)
         self.spinDuration.setSingleStep(0.5)
         self.spinDuration.setProperty("value", 1.0)
@@ -127,6 +129,10 @@ class Ui_scheduleUI(object):
         self.gridLayout.addWidget(self.label_7, 9, 0, 1, 1)
         self.calendar = QtWidgets.QCalendarWidget(scheduleUI)
         self.calendar.setObjectName("calendar")
+        self.calendar.setVerticalHeaderFormat(QtWidgets.QCalendarWidget.NoVerticalHeader)
+        self.calendar.setGridVisible(True)
+        self.calendar.setFirstDayOfWeek(Qt.Monday)
+
         self.gridLayout.addWidget(self.calendar, 2, 0, 1, 10)
         self.notes = QtWidgets.QTextEdit(scheduleUI)
         self.notes.setMaximumSize(QtCore.QSize(16777215, 50))
@@ -136,6 +142,8 @@ class Ui_scheduleUI(object):
         QtCore.QMetaObject.connectSlotsByName(scheduleUI)
 
         # Call Functions
+        time = self.sliderTime.value()
+        self.updateLCD(time)
         self.btnBack.clicked.connect(lambda: toMenu(self, scheduleUI))
         self.sliderTime.valueChanged.connect(self.updateLCD)
         self.listStudents.currentIndexChanged.connect(lambda: loadLable(self))
@@ -185,7 +193,7 @@ class Ui_scheduleUI(object):
             if minutesTo == "50":
                 minutesTo = "30"
 
-        self.lcdTimeTo.display("{0}:{1}".format(hoursTo, minutesTo))
+        self.lcdTimeFrom.display("{0}:{1}".format(hoursTo, minutesTo))
         setTo = ("{0}:{1}".format(hoursTo, minutesTo))
 
         hoursTo = int(hoursTo)*60
@@ -193,7 +201,7 @@ class Ui_scheduleUI(object):
 
         totalTo = hoursTo + minutesTo
         duration = int(self.spinDuration.value() * 60)
-        timeFrom = totalTo - duration
+        timeFrom = totalTo + duration
         timeFrom = (timeFrom/60)*100
         timeFrom = int(timeFrom)
         timeFrom = str(timeFrom)
@@ -216,7 +224,7 @@ class Ui_scheduleUI(object):
             if minutesFrom == "50":
                 minutesFrom = "30"
 
-        self.lcdTimeFrom.display("{0}:{1}".format(hoursFrom, minutesFrom))
+        self.lcdTimeTo.display("{0}:{1}".format(hoursFrom, minutesFrom))
 
         setFrom = ("{0}:{1}".format(hoursFrom, minutesFrom))
 
@@ -263,6 +271,7 @@ def updateInfo(self):
     hours = self.spinDuration.value()
     times = self.store()
     note = self.notes.toPlainText()
+    print(hours)
 
     studentFile = open("Students/{0}.txt".format(student), "r+")
     lines = studentFile.readlines()
@@ -275,6 +284,10 @@ def updateInfo(self):
         lines[index[0]] = ("{0},{1},{2},{3}\n".format(date,hours,times,note))
     else:
         lines.append("{0},{1},{2},{3}\n".format(date,hours,times,note))
+
+    if (any(date in string for string in lines) == True) & (hours == 0):
+        index = [lines.index(i) for i in lines if date in i]
+        lines[index[0]] = ("")
 
     studentFile.writelines(lines)
     studentFile.close()

@@ -3,7 +3,6 @@ from PyQt5.QtPrintSupport import QPrinter, QPrintDialog
 from PyQt5.QtGui import QPixmap, QPainter
 import datetime
 
-
 class AlignDelegate(QtWidgets.QStyledItemDelegate):
     def initStyleOption(self, option, index):
         super(AlignDelegate, self).initStyleOption(option, index)

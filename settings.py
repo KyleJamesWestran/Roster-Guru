@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QFileDialog, QMessageBox
 from PyQt5.QtGui import QPixmap
 
 class Ui_SettingsUI(object):
@@ -11,7 +11,6 @@ class Ui_SettingsUI(object):
         SettingsUI.setMaximumSize(QtCore.QSize(720, 450))
         self.gridLayout = QtWidgets.QGridLayout(SettingsUI)
         self.gridLayout.setObjectName("gridLayout")
-
         self.companyName = QtWidgets.QLineEdit(SettingsUI)
         self.companyName.setObjectName("companyName")
         self.gridLayout.addWidget(self.companyName, 2, 2, 1, 1)
@@ -102,16 +101,13 @@ class Ui_SettingsUI(object):
         self.label_8 = QtWidgets.QLabel(SettingsUI)
         self.label_8.setObjectName("label_8")
         self.gridLayout.addWidget(self.label_8, 5, 3, 1, 2)
-
         self.label_12 = QtWidgets.QLabel(SettingsUI)
         self.label_12.setObjectName("description")
         self.gridLayout.addWidget(self.label_12, 8, 1, 1, 1)
-
         self.usrDescription = QtWidgets.QTextEdit(SettingsUI)
         self.usrDescription.setObjectName("usrMessage")
         self.usrDescription.setFixedWidth(300)
         self.gridLayout.addWidget(self.usrDescription, 9, 1, 1, 2)
-
         self.retranslateUi(SettingsUI)
         QtCore.QMetaObject.connectSlotsByName(SettingsUI)
 
@@ -160,7 +156,7 @@ class Ui_SettingsUI(object):
             self.companyLogo.setStyleSheet("")
 
         #Call Functions
-        self.btnBack.clicked.connect(lambda: updateSettings(self, SettingsUI))
+        self.btnBack.clicked.connect(lambda: uiHandeling(self, SettingsUI))
         self.btnAdd.clicked.connect(lambda: addFocus(self))
         self.btnRemove.clicked.connect(lambda: removeFocus(self))
         self.btnBrowse.clicked.connect(lambda: getImage(self, self.companyLogo))
@@ -192,6 +188,70 @@ def toMenu(self,SettingsUI):
     self.window.show()
     SettingsUI.hide()
     #print("button clicked") #Debug event
+
+def uiHandeling(self, SettingsUI):
+    errors = False;
+    default = self.usrFocus.styleSheet()
+    self.companyName.setStyleSheet(default)
+    self.usrMessage.setStyleSheet(default)
+    self.usrDescription.setStyleSheet(default)
+    self.usrBank.setStyleSheet(default)
+    self.usrAccHold.setStyleSheet(default)
+    self.usrAccNum.setStyleSheet(default)
+    self.usrBankCode.setStyleSheet(default)
+    self.usrRef.setStyleSheet(default)
+    self.listFocus.setStyleSheet(default)
+
+    if self.companyName.text() == "default\n":
+        self.companyName.setStyleSheet("border: 1px solid red;")
+        errors = True
+
+    if self.usrMessage.toPlainText() == "default\n":
+        self.usrMessage.setStyleSheet("border: 1px solid red;")
+        errors = True
+
+    if self.usrDescription.toPlainText() == "default":
+        self.usrDescription.setStyleSheet("border: 1px solid red;")
+        errors = True
+
+    if self.usrBank.text() == "default\n":
+        self.usrBank.setStyleSheet("border: 1px solid red;")
+        errors = True
+
+    if self.usrAccHold.text() == "default\n":
+        self.usrAccHold.setStyleSheet("border: 1px solid red;")
+        errors = True
+
+    if self.usrAccNum.text() == "default\n":
+        self.usrAccNum.setStyleSheet("border: 1px solid red;")
+        errors = True
+
+    if self.usrBankCode.text() == "default\n":
+        self.usrBankCode.setStyleSheet("border: 1px solid red;")
+        errors = True
+
+    if self.usrRef.text() == "default\n":
+        self.usrRef.setStyleSheet("border: 1px solid red;")
+        errors = True
+
+    if self.listFocus.count() == 0:
+        self.listFocus.setStyleSheet("border: 1px solid red;")
+        errors = True
+
+    pathFile = open("Files/paths.txt", "r")
+    imagePath = pathFile.readlines()
+    imagePath = str(imagePath)
+    imagePath = imagePath.replace("['", '')
+    imagePath = imagePath.replace("']", '')
+
+    if imagePath == "[]":
+        self.btnBrowse.setStyleSheet("border: 1px solid red;")
+        errors = True
+
+    if errors == True:
+        showMessage()
+    else:
+        updateSettings(self, SettingsUI)
 
 def updateSettings(self,SettingsUI):
     open('Files/settings.txt', 'w').close()
@@ -271,6 +331,15 @@ def getImage(self, logo):
     self.companyLogo.setPixmap(QPixmap(pixmap))
     self.companyLogo.setScaledContents(True)
     self.companyLogo.setStyleSheet("")
+
+def showMessage():
+    msg = QMessageBox()
+    msg.setIcon(QMessageBox.Information)
+
+    msg.setText("Please enter valid data where indicated red")
+    msg.setWindowTitle("Error")
+    msg.setStandardButtons(QMessageBox.Ok)
+    retval = msg.exec_()
 
 if __name__ == "__main__":
     import sys
