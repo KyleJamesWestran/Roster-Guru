@@ -470,6 +470,7 @@ def calculateCosts(self,rate):
     self.totalCost.setText("<html><head/><body><p align=\"right\">R{}</p></body></html>".format(totalCost))
 
 
+
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
